@@ -16,11 +16,13 @@ The below instructions indicate the plan for this repository and, as of yet, wil
 --
 
 Build Requirements:
+
 * cmake and a standard Linux-style build environment should be installed and working
 * libgmp, the (GNU Multiple Precision Arithmetic Library)[https://gmplib.org/] and its 'dev' packages, must be installed
 
 
 Build and Test:
+
 1. Checkout this repository
 2. cd fizzbuzz\_swiftnav/
 3. mkdir build
