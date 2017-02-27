@@ -61,6 +61,9 @@
 #define FIZZstr "Fizz"
 #define BUZZstr "Buzz"
 
+// needed prototypes
+static void execute_request( const uint64_t n_F );
+
 // quick, simple program options structure. FizzBuzz should never
 // be complex enough require complex option processing. keep it simple.
 typedef struct {
@@ -90,7 +93,6 @@ int main( int argc, char ** argv )
 {
     uint64_t n_F = (uint64_t)-1;                                     // max(u64) means print F_n without limit
     int i = 0;
-    int retval = 0;
 
     progname = argv[0];
 
@@ -116,9 +118,9 @@ int main( int argc, char ** argv )
     if( n_F < 1 )                                                    // treat a request for zero Fibonacci
         n_F = (uint64_t)-1;                                          // numbers as a no-limit request
 
-    retval = execute_request( n_F );
+    execute_request( n_F );
 
-    return retval;
+    return 0;
 }
 
 
@@ -204,7 +206,7 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
  * \param n_F  The 'n' of the last Fibonacci number, F_n, in the desired sequence.
  *             If n_F == (uint64_t)-1 then the sequence will run without limit.
  */
-static int execute_request( const uint64_t n_F )
+static void execute_request( const uint64_t n_F )
 {
     uint64_t n = 1;
     mpz_t F_nm1, F_n, F_np1;                                         // Fibonacci numbers n-1, n, and n+1
@@ -228,7 +230,5 @@ static int execute_request( const uint64_t n_F )
     mpz_clear( F_nm1 );  // always cleanup
     mpz_clear( F_n );
     mpz_clear( F_np1 );
-
-    return 0;
 }
 
