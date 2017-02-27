@@ -33,12 +33,75 @@ Build and Test:
 After the above steps are complete, you should find an executable file named fizzbuzz in the current directory. This program accepts zero or more command-line arguments. For usage documentation, please run the program with the -h option. This is what you should see:
 
 ```
-ana@trifle:~/code/fizzbuzz\_swiftnav/build$ ./fizzbuzz -h
-usage: ./fizzbuzz [-?|-h] [-d] [-v | [-v -v | [...]]] [-z] [<n>]
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (master)$ ./fizzbuzz -h
+usage: ./fizzbuzz [options] [<n>]
+  options:
     -? | -h   print this message and exit
     -d        use a deterministic prime number check
-    -v        increase verbosity. each added -v increases verbosity more
+    -v        increase verbosity. -v may be specified many times
     -z        use zero as the first Fibonacci number
-   <n>        consider the first <n> Fibonacci numbers. (otherwise run without limit)
+    -s3,5p    supress the report of 3 and 5 as primes
+    <n>       consider only the first <n> Fibonacci numbers. (default is to run forever)
 ```
 
+Running a quick test of the first few Fibonacci numbers yields the following. Note that zero is not classified as a Fibonacci number in this run and numbers 3 and 5, because they're both prime and are divisible by 3 and 5 respectively, report both the divisibility and the primality.
+
+```
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (master)$ ./fizzbuzz 10
+1
+1
+BuzzFizz
+Buzz BuzzFizz
+Fizz BuzzFizz
+8
+BuzzFizz
+Buzz
+34
+Fizz
+```
+
+Here we specify that zero is to be recognized as the first prime and 3 and 5 should not be reported as prime. Note that zero divides all integers, so it is reported as divisible by 15.
+```
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (master)$ ./fizzbuzz -z -s3,5p 10
+FizzBuzz
+1
+1
+BuzzFizz
+Buzz
+Fizz
+8
+BuzzFizz
+Buzz
+34
+```
+
+Here is a longer run that uses one verbosity flag, the effect of which is to prepend the line with the Fibonacci number name, and also adds an asterisk to BuzzFizz when the primality cannot be strictly guaranteed. `grep` is used to trim the output to the interesting piece of this result.
+```
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (master)$ time ./fizzbuzz -v -z 3000 | grep BuzzFizz
+F_4: BuzzFizz
+F_5: Buzz BuzzFizz
+F_6: Fizz BuzzFizz
+F_8: BuzzFizz
+F_12: BuzzFizz
+F_14: BuzzFizz
+F_18: BuzzFizz
+F_24: BuzzFizz
+F_30: BuzzFizz
+F_44: BuzzFizz*
+F_48: BuzzFizz*
+F_84: BuzzFizz*
+F_132: BuzzFizz*
+F_138: BuzzFizz*
+F_360: BuzzFizz*
+F_432: BuzzFizz*
+F_434: BuzzFizz*
+F_450: BuzzFizz*
+F_510: BuzzFizz*
+F_570: BuzzFizz*
+F_572: BuzzFizz*
+F_2972: BuzzFizz*
+
+real    0m1.292s
+user    0m1.280s
+sys     0m0.036s
+```
