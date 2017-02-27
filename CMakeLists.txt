@@ -4,7 +4,7 @@ cmake_minimum_required(VERSION 2.8.7)
 project(fizzbuzz_swiftnav)
 
 # Strictifying compiler options
-set(CMAKE_C_FLAGS "-Wall -Werror ${CMAKE_C_FLAGS}")
+set(CMAKE_C_FLAGS "-g -Wall -Werror ${CMAKE_C_FLAGS}")
 
 # these may be used before long. as of now, things are very simple.
 #add_subdirectory(src)
