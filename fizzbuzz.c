@@ -187,7 +187,7 @@ int main( int argc, char ** argv )
         mpz_set_f( expected_largest_fib, expected_largest_fib_d );
         mpf_sqrt( expected_largest_fib_d, expected_largest_fib_d );
 
-        gmp_printf( "approx(F_%u) will likely be approximately: %Zd.\nsqrt( approx(F_%u) ) == %Ff\n",
+        gmp_printf( "approx(F_%u) will be approximately: %Zd.\nsqrt( approx(F_%u) ) == %Ff\n",
                 n_F, expected_largest_fib, n_F, expected_largest_fib_d );
 
         mpz_clear( expected_largest_fib );
@@ -227,7 +227,11 @@ static int is_deterministically_prime( mpz_t F_np1 )
     if( mpz_cmp( max_prime_in_list, F_np1_sqrt ) < 0 )  // if the max is less than the sqrt, generate more primes.
     {
         if( generate_primes_up_to( F_np1_sqrt ) )       // if generate_primes_up_to returns an error, we maxed out memory
-            opts.use_deterministic_primes += 1;          // so we need to stop trying deterministic checks
+        {
+            opts.use_deterministic_primes = 0;          // so we need to stop trying deterministic checks
+            deallocate_primes();                        // this list is no longer useful and is taking up space
+            return 0;
+        }
     }
 
     if( mpz_cmp( max_prime_in_list, F_np1_sqrt ) >= 0 ) // if the max no no less than the sqrt, do the deterministic check
