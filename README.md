@@ -26,9 +26,10 @@ Build and Test:
 1. Checkout this repository
 2. cd fizzbuzz\_swiftnav/
 3. mkdir build
-4. cmake ../
-5. make
-6. make test
+4. cd build
+5. cmake ../
+6. make
+7. make test
 
 After the above steps are complete, you should find an executable file named fizzbuzz in the current directory. This program accepts zero or more command-line arguments. For usage documentation, please run the program with the -h option. This is what you should see:
 
