@@ -13,13 +13,13 @@
 #define FIZZstr "Fizz"
 #define BUZZstr "Buzz"
 
-// quick, simple program options structure. FizzBuzz should never 
+// quick, simple program options structure. FizzBuzz should never
 // be complex enough require complex option processing. keep it simple.
 typedef struct {
     int zero_is_fib;
     int verbose;
     int use_deterministic_primes;
-    int supress_threeandfive_prime_report;         // 3 and 5 are Fibonacci numbers, primes, and  divisible by 3 and 5
+    int supress_threeandfive_prime_report;                           // 3 and 5 are Fibonacci numbers, primes, and divisible by 3 and 5
 } prog_opts_t;
 static prog_opts_t opts = {0};
 
@@ -35,8 +35,8 @@ static void initialize_primes();
 
 static void fibn_step( mpz_t F_np1, mpz_t F_n, mpz_t F_nm1 )
 {
-    mpz_add( F_np1, F_n, F_nm1 );  // np1 is a placeholder only
-    mpz_set( F_nm1, F_n );          // nm1 and n are used to track the sequence
+    mpz_add( F_np1, F_n, F_nm1 );                                    // np1 is a placeholder only
+    mpz_set( F_nm1, F_n );                                           // nm1 and n are used to track the sequence
     mpz_set( F_n, F_np1 );
 }
 
@@ -111,7 +111,7 @@ static int execute_request( uint64_t n_F )
         n++;
     }
 
-    for( ; n_F == (uint64_t)-1 || n <= n_F;  n++ )                   // n_F == (u64)-1  means unbounded. (practical limit is lower.)
+    for( ; n_F == (uint64_t)-1 || n <= n_F; n++ )                    // n_F == (u64)-1  means unbounded. (practical limit is lower.)
     {
         run_checks_and_report( n, F_n );
         fibn_step( F_np1, F_n, F_nm1 );
@@ -146,7 +146,7 @@ static void print_usage_and_exit()
 
 int main( int argc, char ** argv )
 {
-    uint64_t n_F = (uint64_t)-1;    // max(u64) means print F_n without limit
+    uint64_t n_F = (uint64_t)-1;                                     // max(u64) means print F_n without limit
     int i = 0;
 
     progname = argv[0];
@@ -173,8 +173,8 @@ int main( int argc, char ** argv )
             n_F = strtoull( argv[i], NULL, 0 );
     }
 
-    if( n_F < 1 )
-        n_F = (uint64_t)-1;    // treat a request for zero Fibonacci numbers as a no-limit request
+    if( n_F < 1 )                                                    // treat a request for zero Fibonacci
+        n_F = (uint64_t)-1;                                          // numbers as a no-limit request
 
     if( opts.verbose > 1 && n_F < (uint64_t)-1 )
     {
@@ -217,24 +217,24 @@ static int is_deterministically_prime( mpz_t F_np1 )
 
     if( first_run )
     {
-        mpz_init( F_np1_sqrt );                         // doing this frequently is slow. so make it static
-        first_run = 0;                                   // and deal with a tiny bit of uncool mess.
+        mpz_init( F_np1_sqrt );                                      // doing this frequently is slow. so make it static
+        first_run = 0;                                               // and deal with a tiny bit of uncool mess.
     }
 
-    if( mpz_root( F_np1_sqrt, F_np1, 2 ) )             // if the result of this sqrt() isn't exact,
-        mpz_add_ui( F_np1_sqrt, F_np1_sqrt, 2 );       // add two to round up, maintaining even/odd.
+    if( mpz_root( F_np1_sqrt, F_np1, 2 ) )                           // if the result of this sqrt() isn't exact,
+        mpz_add_ui( F_np1_sqrt, F_np1_sqrt, 2 );                     // add two to round up, maintaining even/odd.
 
-    if( mpz_cmp( max_prime_in_list, F_np1_sqrt ) < 0 )  // if the max is less than the sqrt, generate more primes.
+    if( mpz_cmp( max_prime_in_list, F_np1_sqrt ) < 0 )               // if the max is less than the sqrt, generate more primes.
     {
-        if( generate_primes_up_to( F_np1_sqrt ) )       // if generate_primes_up_to returns an error, we maxed out memory
+        if( generate_primes_up_to( F_np1_sqrt ) )                    // if generate_primes_up_to returns an error, we maxed out memory
         {
-            opts.use_deterministic_primes = 0;          // so we need to stop trying deterministic checks
-            deallocate_primes();                        // this list is no longer useful and is taking up space
+            opts.use_deterministic_primes = 0;                       // so we need to stop trying deterministic checks
+            deallocate_primes();                                     // this list is no longer useful and is taking up space
             return 0;
         }
     }
 
-    if( mpz_cmp( max_prime_in_list, F_np1_sqrt ) >= 0 ) // if the max no no less than the sqrt, do the deterministic check
+    if( mpz_cmp( max_prime_in_list, F_np1_sqrt ) >= 0 )              // if the max no no less than the sqrt, do the deterministic check
     {
         if( is_prime__against_list( F_np1 ) )
             isprime = 1;
@@ -281,11 +281,11 @@ static int generate_primes_up_to( mpz_t max )
             {
                 s_mpz_list_t * np = p->next;
 
-                mpz_nextprime( np->v, p->v );                // this probability of the result being composite is very low.
-                while( ! is_prime__against_list( np->v ) )   // but we're generating a deterministic check list, so check it.
+                mpz_nextprime( np->v, p->v );                        // this probability of the result being composite is very low.
+                while( ! is_prime__against_list( np->v ) )           // but we're generating a deterministic check list, so check it.
                     mpz_nextprime( np->v, np->v );
 
-                mpz_init_set( max_prime_in_list, np->v );    // once we get here, we're sure that our result is correct
+                mpz_init_set( max_prime_in_list, np->v );            // once we get here, we're sure that our result is correct
                 p = np;
 
                 primes_count++;
