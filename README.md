@@ -1,5 +1,5 @@
 # fizzbuzz_swiftnav
-Fizz Buzz for Swift Navigation Application Process
+<h3>Fizz Buzz for Swift Navigation Application Process</h3>
 
 This is a modified FizzBuzz algorithm which checks only Fibonacci numbers and prints BuzzFizz if the number is a prime. If the number is divisible by 15 then FizzBuzz is printed. If divisible by 3 then Buzz is printed and if divisible by 5 then Fizz is printed. The choice of programming language used is left to the programmer. This is essentially the whole specification of the task, thus clearly there are many details left unspecified.
 
