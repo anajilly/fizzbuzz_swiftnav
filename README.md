@@ -1,44 +1,15 @@
 # fizzbuzz_swiftnav
 ###FizzBuzz for Swift Navigation Application Process
 
-This is a modified FizzBuzz algorithm. The usual rules for the game apply, with the exceptions that only Fibonacci numbers are considered, and when a number is prime it should be reported with "BuzzFizz" instead of the number itself. The full, given specification is as follows:
+####Quick Start
 
-> In the programming language of your choice, write a program generating the first n Fibonacci numbers F(n), printing
->
-> * "Buzz" when F(n) is divisible by 3.
-> * "Fizz" when F(n) is divisible by 5.
-> * "FizzBuzz" when F(n) is divisible by 15.
-> * "BuzzFizz" when F(n) is prime.
-> * the value F(n) otherwise.
-
-The chosen language is C.
-
-The default implementation attempts to follow the spec as closely as possible and so the default options employ the following assumptions. These defaults can be over-ridden by given command line options.
-
-#### Output Formatting Commandline Options:
-* **-z** Classically, the Fibonacci sequence begins with 1, thus by default F\_1 == 1 (F\_0 is not defined). Use the option **-z** to make F\_1 == 0.
-* **-s3,5p** 3 and 5 are divisible by 3 and 5 respectively, of course, but are also prime. Because the specification doesn't imply that the different reporting options are to be mutually exclusive, by default, all applicable reports are made. The divisibility of these is reported first, followed immediately by their primality reports (the order is selected to match the order in which the requirement is listed in the spec). The Divisibilty reports are not supressible as this aspect of these particular numbers, and their direct naming in the specificiation, is very difficult to dismiss. Primality reports for 3 and 5, however, may be supressed. Use the **-s3,5p** option to actuate this supression.
-* **-lf** By default there are no seperators between reports, as none are named in the spec.  So, for example, the default output begins: "11BuzzFizzBuzzBuzzFizzFizzBuzzFizz" for 1,1,2,3,5. To insert a linefeed between reports, use the **-lf** option. Note that use of the **-lf** option also results in the insertion of a space character between the divisiblity report and primality report specifically for 3 and 5. See examples below.
-
-#### Other Commandline Options:
-* **-h**  print a helpful message
-* **-?**  see: -h
-* **-v**  Increase verbosity. This causes the program to abandon the spec, but this can be useful. '-v' causes F_%d to be printed for every report. '-v -v' causes the Fibonacci number itself to be printed as part of every report also.
-* **-a**  The primality test is probabalistic rather than deterministic, which allows for efficient testing of very large candidate primes. If one wishes to see an indication of potential false-positive primality reports, use -a to add an asterisk to the BuzzFizz report, like so: "BuzzFizz*".  Note that according to [gmplib documentation on this primality test](https://gmplib.org/manual/Number-Theoretic-Functions.html#Number-Theoretic-Functions), the probability that a composite is mistakenly reported to be prime is less than 1/(4^50), a number obtained from the fact that each possible prime is tested 50 times (each goes through 50 passes). This reported statistic implies that each pass is an independent trial, a doubtable claim. However, even if the actual probability of this claim were underestimated by a factor of 10^20, the probability of even one false-positive occurring in the first 50,000 BuzzFizz reports, in the fizzbuzz program output, is 3.94e-6. This is a very comfortably low probability. Because of this, especially with respect to FizzBuzz, there is not compelling case to be made for a truly deterministic primality test.
-* **&lt;n&gt;** Finally, the number of Fibonacci numbers to test is given as an integer. If no integer is given then the sequence runs until it receives a Ctrl+C or is otherwise killed.
-
-The purpose of providing these options, in the absence of a perfectly clear specification, is that the program will be flexible enough that the desired format should be obtainable.
-
-
---
-
-Build Requirements:
+#####Build Requirements:
 
 * [CMake](https://cmake.org/) and a standard Linux-style build environment should be installed and working
 * gmplib, the [GNU Multiple Precision Arithmetic Library](https://gmplib.org/) and its 'dev' packages, must be installed
 
 
-Build and Test:
+#####Build and Test:
 
 1. Checkout this repository
 2. cd fizzbuzz\_swiftnav/
@@ -63,8 +34,46 @@ usage: ./fizzbuzz [options] [<n>]
     <n>       consider only the first <n> Fibonacci numbers. (The default is to run until Ctrl+C is pressed)
 ```
 
-Running a quick test of the first few Fibonacci numbers yields the following. Note that zero is not classified as a Fibonacci number in this run and numbers 3 and 5, because they're both prime and are divisible by 3 and 5 respectively, report both the divisibility and the primality.
+--
 
+####Modified FizzBuzz
+
+This is a modified FizzBuzz algorithm. The usual rules for the game apply, with the exceptions that only Fibonacci numbers are considered, and when a number is prime it should be reported with "BuzzFizz" instead of the number itself. The full, given specification is as follows:
+
+> In the programming language of your choice, write a program generating the first n Fibonacci numbers F(n), printing
+>
+> * "Buzz" when F(n) is divisible by 3.
+> * "Fizz" when F(n) is divisible by 5.
+> * "FizzBuzz" when F(n) is divisible by 15.
+> * "BuzzFizz" when F(n) is prime.
+> * the value F(n) otherwise.
+
+The chosen language is C.
+
+Because the spec may be subject to liberal interpretation, this program is implemented with command line options for the purpose of obtaining outputs which match the different possible interpretations. The rationalle is that the true desired output should be obtainable through the use of different program options and that regardless of what that desired output is, the availability of different formats will likely be seen as useful by some. The default output attempts to produce maximally literal interpretation of the spec, using these assumptions:
+
+1. For each F\_n, all matching rules will be applied. i.e., rules are applied without mutual exclusion. Therefore, because 3 and 5 are prime, the default produces both the divisilibilty output AND the primality output.
+2. Rules are applied in a order that is implied by the order of the rules given in the specification.
+3. A concise output is preferred over a verbose output, so when a number is divisible by 15, we merely invoke both the divisible by 3 and divisible by 5 rules in the order needed to produce the divisible by 15 output. In this way, all applicable rules can said to have been invoked while not producing excessive output.
+4. As no mention of a limit to the 'n' in F(n) was suggested by the spec, an effort is made to remove artificial limits and let cpu speed and memory size define the limits on the size of the numbers.
+5. Because no standard record-seperating characters were mentioned by the spec, none are used in the default output.
+6. Classically, the Fibonacci sequence was defined to start with F\_1 == 1. The convention is followed by default.
+
+
+--
+
+####Examples:
+See above for an example of running with the **-h** option which explains all the command line options.
+
+#####fizzbuzz default output for the first 10 Fibonacci numbers
+Note that, for clarity, 'echo' is appended on this commandline to add a linefeed after fizzbuzz terminates.
+```
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz 10 ; echo
+11BuzzFizzBuzzBuzzFizzFizzBuzzFizz8BuzzFizzBuzz34Fizz
+```
+
+#####fizzbuzz output for the first 10 Fibonacci numbers with report seperators inserted.
+Note that each response to a given F\_n is called a "report." When **-lf** is requested, a linefeed is inserted between the reports for each given F(n). When more than one report is indicated for a given F(n), all are given on one line, each seperated by a single space character. As mentioned earlier, the chosen order for multiple reports given on one line is the order they're listed in the spec.
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf 10
 1
@@ -79,14 +88,8 @@ Buzz
 Fizz
 ```
 
-...or, without the '-lf' option:
-```
-ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz 10 ; echo
-11BuzzFizzBuzzBuzzFizzFizzBuzzFizz8BuzzFizzBuzz34Fizz
-```
-
-
-Here we look at the first 12, specify that zero is to be recognized as the first Fibonacci, and that 3 and 5 should not be reported as prime. Note that zero divides all integers, so it is reported as divisible by 15. The same is run again with double verbose flags to see more clearly what's going on.
+#####fizzbuzz with other options and more outputs
+Here we look at the first 12, specify that zero is to be recognized as the first Fibonacci, and that 3 and 5 should not be reported as prime. Note that zero divides all integers, so it is reported as divisible by 15.
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf -z -s3,5p 12
 FizzBuzz
@@ -101,7 +104,27 @@ Buzz
 34
 Fizz
 BuzzFizz
-ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -v -v -lf -z -s3,5p 12
+```
+
+#####fizzbuzz verbosity flags
+
+
+Here is the same 12 numbers as above but with one verbosity flag, and again with two verbosity flags. The effect is to prepend the line with the Fibonacci number name, and with two, the F(n) itself is shown.
+```
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf -v -z -s3,5p 12
+F_1: FizzBuzz
+F_2: 1
+F_3: 1
+F_4: BuzzFizz
+F_5: Buzz
+F_6: Fizz
+F_7: 8
+F_8: BuzzFizz
+F_9: Buzz
+F_10: 34
+F_11: Fizz
+F_12: BuzzFizz
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf -v -v -z -s3,5p 12
 F_1: 0: FizzBuzz
 F_2: 1: 1
 F_3: 1: 1
@@ -116,38 +139,7 @@ F_11: 55: Fizz
 F_12: 89: BuzzFizz
 ```
 
-Here is a longer run that uses one verbosity flag, the effect of which is to prepend the line with the Fibonacci number name. `grep` is used to trim the output to the interesting piece of this result.
-```
-ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ time ./fizzbuzz -lf -z -v 3000 | grep BuzzFizz
-F_4: BuzzFizz
-F_5: Buzz BuzzFizz
-F_6: Fizz BuzzFizz
-F_8: BuzzFizz
-F_12: BuzzFizz
-F_14: BuzzFizz
-F_18: BuzzFizz
-F_24: BuzzFizz
-F_30: BuzzFizz
-F_44: BuzzFizz
-F_48: BuzzFizz
-F_84: BuzzFizz
-F_132: BuzzFizz
-F_138: BuzzFizz
-F_360: BuzzFizz
-F_432: BuzzFizz
-F_434: BuzzFizz
-F_450: BuzzFizz
-F_510: BuzzFizz
-F_570: BuzzFizz
-F_572: BuzzFizz
-F_2972: BuzzFizz
-
-real	0m1.418s
-user	0m1.416s
-sys	0m0.004s
-```
-
-And the same run again with two visiblity flags so that the Fibonacci number is question is printed for every report, and the -a flag marks BuzzFizz with an asterisk whenever the primality is not strictly guaranteed.
+Here is a longer run that uses the -a flag, which marks BuzzFizz with an asterisk whenever the primality is not strictly guaranteed. (See NOTES.md for more info about primality test.) Note that `grep` is used to limit the output to what is most interesting. 
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ time ./fizzbuzz -lf -z -vv -a 3000 | grep BuzzFizz
 F_4: 2: BuzzFizz
