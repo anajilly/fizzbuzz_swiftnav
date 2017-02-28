@@ -13,12 +13,12 @@ This is a modified FizzBuzz algorithm. The usual rules for the game apply, with 
 
 The chosen language is C.
 
-The default implementation attempts to follow the spec as closely as possible and so the default options employ the following assumptions. These defaults can be over-ridden by command line options.
+The default implementation attempts to follow the spec as closely as possible and so the default options employ the following assumptions. These defaults can be over-ridden by given command line options.
 
 #### Output Formatting Commandline Options:
 * **-z** Classically, the Fibonacci sequence begins with 1, thus by default F\_1 == 1 (F\_0 is not defined). Use the option **-z** to make F\_1 == 0.
-* **-s3,5p** 3 and 5 are divisible by 3 and 5 respectively, of course, but also prime. Because the specification doesn't imply the different reporting options are mutually exclusive, by default, the divisibility of these is reported first, followed immediately by their primality reports (same order as the requirement is listed in the spec). The Divisibilty reports are not supressible as this aspect of these particular numbers, and their direct naming in the specificiation, is very difficult to dismiss. Primality reports for 3 and 5 may be supressed, however. To do this, use the **-s3,5p** option.
-* **-lf** By default there are no seperators between reports.  So, for example, the output begins: "11BuzzFizzBuzzBuzzFizzFizzBuzzFizz" for 1,1,2,3,5. To insert a linefeed between reports, use the **-lf** option. Note that use of the **-lf** option also results in the insertion of a space character between the divisiblity report and primality report for 3 and 5. See examples below.
+* **-s3,5p** 3 and 5 are divisible by 3 and 5 respectively, of course, but also prime. Because the specification doesn't imply that the different reporting options are to be mutually exclusive, by default reportable options are reported. The divisibility of these is reported first, followed immediately by their primality reports (the order is selected to match the order in which the requirement is listed in the spec). The Divisibilty reports are not supressible as this aspect of these particular numbers, and their direct naming in the specificiation, is very difficult to dismiss. Primality reports for 3 and 5, however, may be supressed. Use the **-s3,5p** option to actuate this supression.
+* **-lf** By default there are no seperators between reports, as none are named in the spec.  So, for example, the default output begins: "11BuzzFizzBuzzBuzzFizzFizzBuzzFizz" for 1,1,2,3,5. To insert a linefeed between reports, use the **-lf** option. Note that use of the **-lf** option also results in the insertion of a space character between the divisiblity report and primality report specifically for 3 and 5. See examples below.
 
 #### Other Commandline Options:
 * **-h**  print a helpful message
