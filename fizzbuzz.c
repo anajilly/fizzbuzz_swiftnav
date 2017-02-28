@@ -73,6 +73,7 @@ typedef struct {
     int verbose;                                                     /*!< 0 produces standar output greater values produce more, but non-standard output. */
     int supress_threeandfive_prime_report;                           /*!< 3 and 5 are prime, and divisible by 3 and 5. This adds reporting guidence. */
     int add_linefeeds;                                               /*!< option to add line-feeds to all test outputs */
+    int add_BuzzFizz_asterisk;                                       /*!< option to add an asterisk after BuzzFizz when there's a possbility that it's not prime */
 } prog_opts_t;
 
 static prog_opts_t opts = {0};
@@ -88,6 +89,7 @@ static void print_usage_and_exit()
     fprintf( stderr, "    -z        use zero as the first Fibonacci number\n" );
     fprintf( stderr, "    -s3,5p    supress the report of 3 and 5 as primes\n" );
     fprintf( stderr, "    -lf       add linefeed after each F_n report\n" );
+    fprintf( stderr, "    -a        add an asterisk after each BuzzFizz which is not deterministically prime\n" );
     fprintf( stderr, "    <n>       consider only the first <n> Fibonacci numbers. (The default is to run until Ctrl+C is pressed)\n\n" );
     exit(0);
 }
@@ -107,6 +109,7 @@ int main( int argc, char ** argv )
         if( 0 == strcmp( argv[i], "-vvv" ) ) opts.verbose += 3;
 
         if( 0 == strcmp( argv[i], "-lf" ) )  opts.add_linefeeds = 1;
+        if( 0 == strcmp( argv[i], "-a" ) )   opts.add_BuzzFizz_asterisk = 1;
 
         if( 0 == strcmp( argv[i], "-z" ) )
             opts.zero_is_fib = 1;
@@ -162,8 +165,8 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
     int printFIZZ = mpz_divisible_ui_p( F_n, 5 );
     int printBUZZ = mpz_divisible_ui_p( F_n, 3 );
 
-    if( opts.verbose > 1 ) printf("F_%lu: ", n);                     // useful info for checking the algorithm.
-    if( opts.verbose > 2 ) gmp_printf( "%Zd: ", F_n );
+    if( opts.verbose > 0 ) printf("F_%lu: ", n);                     // useful info for checking the algorithm.
+    if( opts.verbose > 1 ) gmp_printf( "%Zd: ", F_n );
 
     if( printFIZZ ) printf( "%s", FIZZstr );                         // handle the Fizz case first because if n is divisible by 3
     if( printBUZZ ) printf( "%s", BUZZstr );                         // also then Buzz is appended to Fizz, which also handles 15
@@ -190,7 +193,7 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
         {
         case 1:                                                      // Almost certainly prime.
             printf( "%s%s%s", BUZZstr, FIZZstr,                      // BuzzFizz,
-                    (opts.verbose ? "*" : "") );                     // with verbose-optional caveat '*'
+                    (opts.add_BuzzFizz_asterisk ? "*" : "") );       // with optional caveat '*'
             break;
         case 2:                                                      // Definitely prime. BuzzFizz
             printf( "%s%s", BUZZstr, FIZZstr );
