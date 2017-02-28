@@ -24,7 +24,7 @@ The default implementation attempts to follow the spec as closely as possible an
 * **-h**  print a helpful message
 * **-?**  see: -h
 * **-v**  Increase verbosity. This causes the program to abandon the spec, but this can be useful. '-v' causes F_%d to be printed for every report. '-v -v' causes the Fibonacci number itself to be printed as part of every report also.
-* **-a**  The primality test is probabalistic rather than deterministic, which allows for efficient testing of very large candidate primes. If one wishes to see an indication of potential false-positive primality reports, use -a to add an asterisk to the BuzzFizz report, like so: "BuzzFizz*".  Note that according to [gmplib documentation on this primality test](https://gmplib.org/manual/Number-Theoretic-Functions.html#Number-Theoretic-Functions), the probability that a composite is mistakenly reported to be prime is less than 1/(4^50), a number obtained from the fact that each possible prime is tested 50 times (each goes through 50 passes). This reported statistic implies that each pass is an independent trial, a doubtable claim. However, even if the actual probability of this claim were underestimated by a factor of 10^20, the probability of even one false-positive in the first 50,000 prime reports is 3.94e-6. A very comfortably low probability. Because of this, especially with respect to FizzBuzz, there is not compelling case to be made _for_ a truly deterministic primality test.
+* **-a**  The primality test is probabalistic rather than deterministic, which allows for efficient testing of very large candidate primes. If one wishes to see an indication of potential false-positive primality reports, use -a to add an asterisk to the BuzzFizz report, like so: "BuzzFizz*".  Note that according to [gmplib documentation on this primality test](https://gmplib.org/manual/Number-Theoretic-Functions.html#Number-Theoretic-Functions), the probability that a composite is mistakenly reported to be prime is less than 1/(4^50), a number obtained from the fact that each possible prime is tested 50 times (each goes through 50 passes). This reported statistic implies that each pass is an independent trial, a doubtable claim. However, even if the actual probability of this claim were underestimated by a factor of 10^20, the probability of even one false-positive in the first 50,000 prime reports is 3.94e-6. A very comfortably low probability. Because of this, especially with respect to FizzBuzz, there is not compelling case to be made for a truly deterministic primality test.
 * **&lt;n&gt;** Finally, the number of Fibonacci numbers to test is given as an integer. If no integer is given then the sequence runs until it receives a Ctrl+C or is otherwise killed.
 
 The purpose of providing these options, in the absence of a perfectly clear specification, is that the program will be flexible enough that the desired format should be obtainable.
@@ -52,14 +52,14 @@ After the above steps are complete, you should find an executable file named fiz
 
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -h
-usage: ./fizzbuzz [options] [&lt;n&gt;]
+usage: ./fizzbuzz [options] [<n>]
   options:
     -? | -h   print this message and exit
     -v        increase verbosity. -v may be specified many times
     -z        use zero as the first Fibonacci number
     -s3,5p    supress the report of 3 and 5 as primes
     -lf       add linefeed after each F_n report
-    -a        add an asterisk after each BuzzFizz which is not deterministically prime
+    -a        add an asterisk after BuzzFizz when the report, with very low probability, may be inaccurate
     <n>       consider only the first <n> Fibonacci numbers. (The default is to run until Ctrl+C is pressed)
 ```
 

@@ -89,7 +89,7 @@ static void print_usage_and_exit()
     fprintf( stderr, "    -z        use zero as the first Fibonacci number\n" );
     fprintf( stderr, "    -s3,5p    supress the report of 3 and 5 as primes\n" );
     fprintf( stderr, "    -lf       add linefeed after each F_n report\n" );
-    fprintf( stderr, "    -a        add an asterisk after each BuzzFizz which is not deterministically prime\n" );
+    fprintf( stderr, "    -a        add an asterisk after BuzzFizz when the report, with very low probability, may be inaccurate\n" );
     fprintf( stderr, "    <n>       consider only the first <n> Fibonacci numbers. (The default is to run until Ctrl+C is pressed)\n\n" );
     exit(0);
 }
