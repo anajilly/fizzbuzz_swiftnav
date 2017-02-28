@@ -54,13 +54,14 @@ The chosen language is C.
 
 Because the spec may be subject to liberal interpretation, this program is implemented with command line options for the purpose of obtaining outputs which match the different possible interpretations. The rationalle is that the true desired output should be obtainable through the use of different program options and that regardless of what that desired output is, the availability of different formats will likely be seen as useful by some. The default output attempts to produce maximally literal interpretation of the spec, using these assumptions:
 
-1. For each F(n), all matching rules will be applied. i.e., rules are applied without mutual exclusion. Therefore, because 3 and 5 are prime, the default produces both the divisilibilty output AND the primality output.
-2. Rules are applied in a order that is implied by the order of the rules given in the specification.
-3. A concise output is preferred over a verbose output, so when a number is divisible by 15, we merely invoke both the divisible by 3 and divisible by 5 rules in the order needed to produce the divisible by 15 output. In this way, all applicable rules can said to have been invoked while not producing excessive output.
-4. As no mention of a limit to the 'n' in F(n) was suggested by the spec, an effort is made to remove artificial limits and let cpu speed and memory size define the limits on the size of the numbers.
+1. The union criterion. For each F(n), all matching rules will be applied, as a union (i.e. without mutual exclusion). For example: because 3 and 5 are prime, the default produces both the divisilibilty output AND the primality output.
+2. In absence of other guidance, unioned rules are applied in an order that is implied by the order of the rules given in the specification.
+3. A concise output is preferred over a verbose output. When a number is divisible by 15, we merely invoke both the divisible by 3 and divisible by 5 rules in the order needed to produce the specified divisible by 15 output. In this way the union criterion is applied, producing the minimal output that satisfies all applicable rules.
+4. As there is no mention of a limit to F(n)'s 'n' in the specification, an effort is made to remove artificial limits to n.
 5. Because no standard record-seperating characters were mentioned by the spec, none are used in the default output.
 6. Classically, the Fibonacci sequence was defined to start with F(1) == 1. The convention is followed by default.
 
+These are the assumptions made which are used in the *default* output. To achieve a different output, command-line options are available, and are listed above.
 
 --
 
