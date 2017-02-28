@@ -1,24 +1,41 @@
 # fizzbuzz_swiftnav
-<h3>Fizz Buzz for Swift Navigation Application Process</h3>
+<h3>FizzBuzz for Swift Navigation Application Process</h3>
 
-This is a modified FizzBuzz algorithm which checks only Fibonacci numbers and prints BuzzFizz if the number is a prime. If the number is divisible by 15 then FizzBuzz is printed. If divisible by 3 then Buzz is printed and if divisible by 5 then Fizz is printed. The choice of programming language used is left to the programmer. This is essentially the whole specification of the task, thus clearly there are many details left unspecified.
+This is a modified FizzBuzz algorithm. The usual rules for the game apply, with the exceptions that only Fibonacci numbers are considered, and when a number is prime it should be reported with "BuzzFizz" instead of the number itself. The exact, given specification is as follows:
 
-For instance, 3 and 5 are both divisible by 3 and 5 respectively, but are also prime numbers. The question naturally arises, should one of the two possible interpretations of the specification take precedence, or should all applicable actions be executed? I have yet to ask this question and hesitate to do so because it's silly and can be handled using a program option. Perhaps this is part of the test though? This is an aspect of the spec which is decidedly unclear.
+> In the programming language of your choice, write a program generating the first n Fibonacci numbers F(n), printing
+>
+> * "Buzz" when F(n) is divisible by 3.
+> * "Fizz" when F(n) is divisible by 5.
+> * "FizzBuzz" when F(n) is divisible by 15.
+> * "BuzzFizz" when F(n) is prime.
+> * the value F(n) otherwise.
 
-Also, because limits are not specified, one presumes this program should be constrained by natural system limits of memory and processor speed (i.e. time), instead of by some arbitrary limit having to do with variable type sizes, etc.. To all other unanswered questions, one naturally presumes that the typical FizzBuzz idioms apply, such as each printed object should occupy its own line, etc..  Because the project is so simple, and easily modified to meet some more precise specification, it is assumed that we can begin with the most straightforward implementation and then apply corrections if needed.
+The chosen language is C.
 
-The focus of the work, as indicate by Swift Navigation, will be to create a project which is maintainable, portable, and how easy to use by 3rd parties. Clues in the specification page indicate that the amount of work put into this project should be in line with the expected complexity of the project itself. As FizzBuzz is simple by definition, and even this modified FizzBuzz involving Fibonacci numbers and primes is still simple, the corresponding amount of effort should be minimal, but adequate.
+The default implementation attempts to follow the spec as closely as possible and so the default options employ the following assumptions. These defaults are overridable by command line options.
 
-I've made this project public, so far, because I don't remember there being a requirement that it be private. I will likely make this a private project before long, however. Regardless of its visibility, one must presume that if you, the reader, wish to be considered for a position at Swift Navigation, that you should implement your own version of this project from scratch.
+* By default F\_1 == 1 (F\_0 is not defined). Use the option _-z_ to make F\_1 == 0.
+* 3 and 5 are prime and divisible by 3 and 5 respectively. By default, the divisibility of these is reported first, followed immediately by their primality reports. The Divisibilty reports are not supressible. To supress primality reports for 3 and 5, use the _-s3,5p_ option.
+* By default there are no seperators between reports.  So, for example, the output begins: "11BuzzFizzBuzzBuzzFizzFizzBuzzFizz" for 1,1,2,3,5. To insert a linefeed between reports, use the -lf option. Note that use of the _-lf_ option also results in the insertion of a space character between the divisiblity report and primality report for 3 and 5.
 
-The below instructions indicate the plan for this repository and, as of yet, will not function as advertised. Expect this to change later today.
+Other commandline options include:
+* -h  print a helpful message
+* -?  see: -h
+* -v  Increase verbosity. This causes the program to abandon the spec, but this can be useful. '-v' causes F_%d to be printed for every report. '-v -v' causes the Fibonacci number itself to be printed as part of every report also.
+* -a  The primality test is probabalistic rather than deterministic, which allows for efficient testing of very large candidate primes. If one wishes to see an indication of potential false-positive primality reports, use -a to add an asterisk to the BuzzFizz report, like so: "BuzzFizz*".  Note that according to (gmplib documentation on this primality test)[https://gmplib.org/manual/Number-Theoretic-Functions.html#Number-Theoretic-Functions], the probability that a composite is mistakenly reported to be prime is less than 1/(4^50), a number obtained from the fact that each possible prime is tested 50 times (each goes through 50 passes). This reported statistic implies that each pass is an independent trial, a doubtable claim. However, even if the actual probability of this claim were underestimated by a factor of 10^20, the probability of even one false-positive in the first 50,000 prime reports is 3.94e-6. A very comfortably low probability. Because of this, especially with respect to FizzBuzz, the need for a truely deterministic test is absent.
+* <n> Finally, the number of Fibonacci numbers to test is given as an integer. If no integer is given then the sequence runs until it receives a Ctrl+C or is otherwise killed.
+
+The purpose of providing these options, in the absence of a perfectly clear specification, is that the provided options should make the program flexible enough that the desired format should be obtainable from it.
+
+
 
 --
 
 Build Requirements:
 
-* cmake and a standard Linux-style build environment should be installed and working
-* libgmp, the (GNU Multiple Precision Arithmetic Library)[https://gmplib.org/] and its 'dev' packages, must be installed
+* (CMake)[https://cmake.org/] and a standard Linux-style build environment should be installed and working
+* gmplib, the (GNU Multiple Precision Arithmetic Library)[https://gmplib.org/] and its 'dev' packages, must be installed
 
 
 Build and Test:
@@ -29,26 +46,27 @@ Build and Test:
 4. cd build
 5. cmake ../
 6. make
-7. make test
 
-After the above steps are complete, you should find an executable file named fizzbuzz in the current directory. This program accepts zero or more command-line arguments. For usage documentation, please run the program with the -h option. This is what you should see:
+
+After the above steps are complete, you should find an executable file named fizzbuzz in the current directory. This program accepts zero or more command-line arguments. For usage documentation, please run the program with the -h option.
 
 ```
-ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (master)$ ./fizzbuzz -h
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -h
 usage: ./fizzbuzz [options] [<n>]
   options:
     -? | -h   print this message and exit
-    -d        use a deterministic prime number check
     -v        increase verbosity. -v may be specified many times
     -z        use zero as the first Fibonacci number
     -s3,5p    supress the report of 3 and 5 as primes
-    <n>       consider only the first <n> Fibonacci numbers. (default is to run forever)
+    -lf       add linefeed after each F_n report
+    -a        add an asterisk after each BuzzFizz which is not deterministically prime
+    <n>       consider only the first <n> Fibonacci numbers. (The default is to run until Ctrl+C is pressed)
 ```
 
 Running a quick test of the first few Fibonacci numbers yields the following. Note that zero is not classified as a Fibonacci number in this run and numbers 3 and 5, because they're both prime and are divisible by 3 and 5 respectively, report both the divisibility and the primality.
 
 ```
-ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (master)$ ./fizzbuzz 10
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf 10
 1
 1
 BuzzFizz
@@ -61,9 +79,16 @@ Buzz
 Fizz
 ```
 
+...or, without the '-lf' option:
+```
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz 10 ; echo
+11BuzzFizzBuzzBuzzFizzFizzBuzzFizz8BuzzFizzBuzz34Fizz
+```
+
+
 Here we specify that zero is to be recognized as the first prime and 3 and 5 should not be reported as prime. Note that zero divides all integers, so it is reported as divisible by 15.
 ```
-ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (master)$ ./fizzbuzz -z -s3,5p 10
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf -z -s3,5p 10
 FizzBuzz
 1
 1
@@ -78,7 +103,7 @@ Buzz
 
 Here is a longer run that uses one verbosity flag, the effect of which is to prepend the line with the Fibonacci number name, and also adds an asterisk to BuzzFizz when the primality cannot be strictly guaranteed. `grep` is used to trim the output to the interesting piece of this result.
 ```
-ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (master)$ time ./fizzbuzz -v -z 3000 | grep BuzzFizz
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ time ./fizzbuzz -lf -z -v 3000 | grep BuzzFizz
 F_4: BuzzFizz
 F_5: Buzz BuzzFizz
 F_6: Fizz BuzzFizz
@@ -88,21 +113,55 @@ F_14: BuzzFizz
 F_18: BuzzFizz
 F_24: BuzzFizz
 F_30: BuzzFizz
-F_44: BuzzFizz*
-F_48: BuzzFizz*
-F_84: BuzzFizz*
-F_132: BuzzFizz*
-F_138: BuzzFizz*
-F_360: BuzzFizz*
-F_432: BuzzFizz*
-F_434: BuzzFizz*
-F_450: BuzzFizz*
-F_510: BuzzFizz*
-F_570: BuzzFizz*
-F_572: BuzzFizz*
-F_2972: BuzzFizz*
+F_44: BuzzFizz
+F_48: BuzzFizz
+F_84: BuzzFizz
+F_132: BuzzFizz
+F_138: BuzzFizz
+F_360: BuzzFizz
+F_432: BuzzFizz
+F_434: BuzzFizz
+F_450: BuzzFizz
+F_510: BuzzFizz
+F_570: BuzzFizz
+F_572: BuzzFizz
+F_2972: BuzzFizz
 
-real    0m1.292s
-user    0m1.280s
-sys     0m0.036s
+real	0m1.418s
+user	0m1.416s
+sys	0m0.004s
 ```
+
+And the same run again with two visiblity flags so that the Fibonacci number is question is printed for every report, and the -a flag to marks BuzzFizz with an asterisk whenever the primality is not strictly guaranteed.
+```
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ time ./fizzbuzz -lf -z -vv -a 3000 | grep BuzzFizz
+F_4: 2: BuzzFizz
+F_5: 3: Buzz BuzzFizz
+F_6: 5: Fizz BuzzFizz
+F_8: 13: BuzzFizz
+F_12: 89: BuzzFizz
+F_14: 233: BuzzFizz
+F_18: 1597: BuzzFizz
+F_24: 28657: BuzzFizz
+F_30: 514229: BuzzFizz
+F_44: 433494437: BuzzFizz*
+F_48: 2971215073: BuzzFizz*
+F_84: 99194853094755497: BuzzFizz*
+F_132: 1066340417491710595814572169: BuzzFizz*
+F_138: 19134702400093278081449423917: BuzzFizz*
+F_360: 475420437734698220747368027166749382927701417016557193662268716376935476241: BuzzFizz*
+F_432: 529892711006095621792039556787784670197112759029534506620905162834769955134424689676262369: BuzzFizz*
+F_434: 1387277127804783827114186103186246392258450358171783690079918032136025225954602593712568353: BuzzFizz*
+F_450: 3061719992484545030554313848083717208111285432353738497131674799321571238149015933442805665949: BuzzFizz*
+F_510: 10597999265301490732599643671505003412515860435409421932560009680142974347195483140293254396195769876129909: BuzzFizz*
+F_570: 36684474316080978061473613646275630451100586901195229815270242868417768061193560857904335017879540515228143777781065869: BuzzFizz*
+F_572: 96041200618922553823942883360924865026104917411877067816822264789029014378308478864192589084185254331637646183008074629: BuzzFizz*
+F_2972: 357103560641909860720907774139063454445569926582843306794041997476301071102767570483343563518510007800304195444080518562630900027386498933944619210192856768352683468831754423234217978525765921040747291316681576556861490773135214861782877716560879686368266117365351884926393775431925116896322341130075880287169244980698837941931247516010101631704349963583400361910809925847721300802741705519412306522941202429437928826033885416656967971559902743150263252229456298992263008126719589203430407385228230361628494860172129702271172926469500802342608722006420745586297267929052509059154340968348509580552307148642001438470316229: BuzzFizz*
+
+real	0m1.274s
+user	0m1.268s
+sys	0m0.008s
+```
+--
+
+The (GNU Multiple Precision Arithmetic Library)[https://gmplib.org/] makes these extremely large numbers easy to work with.
