@@ -17,14 +17,14 @@ The default implementation attempts to follow the spec as closely as possible an
 
 #### Output Formatting Commandline Options:
 * **-z** Classically, the Fibonacci sequence begins with 1, thus by default F\_1 == 1 (F\_0 is not defined). Use the option **-z** to make F\_1 == 0.
-* **-s3,5p** 3 and 5 are divisible by 3 and 5 respectively, of course, but also prime. Because the specification doesn't imply that the different reporting options are to be mutually exclusive, by default reportable options are reported. The divisibility of these is reported first, followed immediately by their primality reports (the order is selected to match the order in which the requirement is listed in the spec). The Divisibilty reports are not supressible as this aspect of these particular numbers, and their direct naming in the specificiation, is very difficult to dismiss. Primality reports for 3 and 5, however, may be supressed. Use the **-s3,5p** option to actuate this supression.
+* **-s3,5p** 3 and 5 are divisible by 3 and 5 respectively, of course, but are also prime. Because the specification doesn't imply that the different reporting options are to be mutually exclusive, by default, all applicable reports are made. The divisibility of these is reported first, followed immediately by their primality reports (the order is selected to match the order in which the requirement is listed in the spec). The Divisibilty reports are not supressible as this aspect of these particular numbers, and their direct naming in the specificiation, is very difficult to dismiss. Primality reports for 3 and 5, however, may be supressed. Use the **-s3,5p** option to actuate this supression.
 * **-lf** By default there are no seperators between reports, as none are named in the spec.  So, for example, the default output begins: "11BuzzFizzBuzzBuzzFizzFizzBuzzFizz" for 1,1,2,3,5. To insert a linefeed between reports, use the **-lf** option. Note that use of the **-lf** option also results in the insertion of a space character between the divisiblity report and primality report specifically for 3 and 5. See examples below.
 
 #### Other Commandline Options:
 * **-h**  print a helpful message
 * **-?**  see: -h
 * **-v**  Increase verbosity. This causes the program to abandon the spec, but this can be useful. '-v' causes F_%d to be printed for every report. '-v -v' causes the Fibonacci number itself to be printed as part of every report also.
-* **-a**  The primality test is probabalistic rather than deterministic, which allows for efficient testing of very large candidate primes. If one wishes to see an indication of potential false-positive primality reports, use -a to add an asterisk to the BuzzFizz report, like so: "BuzzFizz*".  Note that according to [gmplib documentation on this primality test](https://gmplib.org/manual/Number-Theoretic-Functions.html#Number-Theoretic-Functions), the probability that a composite is mistakenly reported to be prime is less than 1/(4^50), a number obtained from the fact that each possible prime is tested 50 times (each goes through 50 passes). This reported statistic implies that each pass is an independent trial, a doubtable claim. However, even if the actual probability of this claim were underestimated by a factor of 10^20, the probability of even one false-positive in the first 50,000 prime reports is 3.94e-6. A very comfortably low probability. Because of this, especially with respect to FizzBuzz, there is not compelling case to be made for a truly deterministic primality test.
+* **-a**  The primality test is probabalistic rather than deterministic, which allows for efficient testing of very large candidate primes. If one wishes to see an indication of potential false-positive primality reports, use -a to add an asterisk to the BuzzFizz report, like so: "BuzzFizz*".  Note that according to [gmplib documentation on this primality test](https://gmplib.org/manual/Number-Theoretic-Functions.html#Number-Theoretic-Functions), the probability that a composite is mistakenly reported to be prime is less than 1/(4^50), a number obtained from the fact that each possible prime is tested 50 times (each goes through 50 passes). This reported statistic implies that each pass is an independent trial, a doubtable claim. However, even if the actual probability of this claim were underestimated by a factor of 10^20, the probability of even one false-positive occurring in the first 50,000 BuzzFizz reports, in the fizzbuzz program output, is 3.94e-6. This is a very comfortably low probability. Because of this, especially with respect to FizzBuzz, there is not compelling case to be made for a truly deterministic primality test.
 * **&lt;n&gt;** Finally, the number of Fibonacci numbers to test is given as an integer. If no integer is given then the sequence runs until it receives a Ctrl+C or is otherwise killed.
 
 The purpose of providing these options, in the absence of a perfectly clear specification, is that the program will be flexible enough that the desired format should be obtainable.
@@ -86,9 +86,9 @@ ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz 10 ; ech
 ```
 
 
-Here we specify that zero is to be recognized as the first prime and 3 and 5 should not be reported as prime. Note that zero divides all integers, so it is reported as divisible by 15.
+Here we look at the first 12, specify that zero is to be recognized as the first Fibonacci, and that 3 and 5 should not be reported as prime. Note that zero divides all integers, so it is reported as divisible by 15. The same is run again with double verbose flags to see more clearly what's going on.
 ```
-ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf -z -s3,5p 10
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf -z -s3,5p 12
 FizzBuzz
 1
 1
@@ -99,6 +99,21 @@ Fizz
 BuzzFizz
 Buzz
 34
+Fizz
+BuzzFizz
+ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -v -v -lf -z -s3,5p 12
+F_1: 0: FizzBuzz
+F_2: 1: 1
+F_3: 1: 1
+F_4: 2: BuzzFizz
+F_5: 3: Buzz
+F_6: 5: Fizz
+F_7: 8: 8
+F_8: 13: BuzzFizz
+F_9: 21: Buzz
+F_10: 34: 34
+F_11: 55: Fizz
+F_12: 89: BuzzFizz
 ```
 
 Here is a longer run that uses one verbosity flag, the effect of which is to prepend the line with the Fibonacci number name. `grep` is used to trim the output to the interesting piece of this result.
@@ -132,7 +147,7 @@ user	0m1.416s
 sys	0m0.004s
 ```
 
-And the same run again with two visiblity flags so that the Fibonacci number is question is printed for every report, and the -a flag to marks BuzzFizz with an asterisk whenever the primality is not strictly guaranteed.
+And the same run again with two visiblity flags so that the Fibonacci number is question is printed for every report, and the -a flag marks BuzzFizz with an asterisk whenever the primality is not strictly guaranteed.
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ time ./fizzbuzz -lf -z -vv -a 3000 | grep BuzzFizz
 F_4: 2: BuzzFizz
