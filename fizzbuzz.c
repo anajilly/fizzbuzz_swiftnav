@@ -64,12 +64,14 @@
 // needed prototypes
 static void execute_request( const uint64_t n_F );
 
-// quick, simple program options structure. FizzBuzz should never
-// be complex enough require complex option processing. keep it simple.
+//! A quick and simple struct for holding command-line program options.
+/** FizzBuzz should never be complex enough require complex option
+ *  processing than this. Keep it simple.
+ */
 typedef struct {
-    int zero_is_fib;
-    int verbose;
-    int supress_threeandfive_prime_report;                           // 3 and 5 are Fibonacci numbers, primes, and divisible by 3 and 5
+    int zero_is_fib;                                                 /*!< if(zero_is_fib != 0) F_1 is zero */
+    int verbose;                                                     /*!< 0 produces standar output greater values produce more, but non-standard output. */
+    int supress_threeandfive_prime_report;                           /*!< 3 and 5 are prime, and divisible by 3 and 5. This adds reporting guidence. */
 } prog_opts_t;
 
 static prog_opts_t opts = {0};
@@ -135,7 +137,7 @@ int main( int argc, char ** argv )
  * F_n will again be the next Fibonnaci number following F_nm1.  F_np1
  * has no use outside of fibn_step.
  *
- * \param F_np1  F_(n+1)
+ * \param F_np1  F_(n+1)    The initial value is ignored.
  * \param F_n    F_(n)
  * \param F_nm1  F_(n-1)
  */
@@ -148,8 +150,8 @@ static void fibn_step( mpz_t F_np1, mpz_t F_n, mpz_t F_nm1 )         // use 3 ar
 
 /** \brief Execute the FizzBuzz checks and produce output for one Fibonacci number.
  * 
- * \param F_n  An allocate Fibonacci number, to be evaluated and reported on.
  * \param n    The 'n' number used to name the Fibonacci number in the sequence.
+ * \param F_n  An allocate Fibonacci number, to be evaluated and reported on.
  */
 static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
 {
@@ -160,12 +162,14 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
     if( opts.verbose > 2 ) gmp_printf( "%Zd: ", F_n );
 
     if( printFIZZ ) printf( "%s", FIZZstr );                         // handle the Fizz case first because if n is divisible by 3
-    if( printBUZZ ) printf( "%s", BUZZstr );                         // also then Buzz is appended to Fizz, which handles 15 also
+    if( printBUZZ ) printf( "%s", BUZZstr );                         // also then Buzz is appended to Fizz, which also handles 15
 
-
-    // 0,1,1,2,3,5
-    // 1,1,2,3,5,8
-    if( n < 7 && n > 3 && ! opts.supress_threeandfive_prime_report ) // for F_n in {2,3,5,8} (testing n is simple and fast check)
+    // F_ 1,2,3,4,5,6
+    //    0,1,1,2,3,5
+    //    1,1,2,3,5,8
+    if(    n < 7                                                     // for F_n in {2,3,5,8}
+        && n > 3                                                     // testing n instead of F_n is simple and fast
+        && ! opts.supress_threeandfive_prime_report )                // and this block is all about reporting 3,5 as prime
     {
         if( printFIZZ || printBUZZ )                                 // divisibility by 3 or 5 also implies primality
             printf( " %s%s", BUZZstr, FIZZstr );                     // so report it as prime in addition to divisible
@@ -197,14 +201,13 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
 
 /** \brief Execute the FizzBuzz algorithm for each selected Fibonacci number.
  *
- * The Fibonacci sequence is generated and each number in it is fed to the
- * run_checks_and_report() function. This function handles whether 0 is reported
- * as the first Fibonacci number or not, and it optionally terminates when the
- * check-and-report has been executed for a command-line specified selection of
- * Fibonacci numbers.
+ * The Fibonacci sequence is generated, and each number is fed to the function:
+ * run_checks_and_report(). execute_request() handles whether 0 is reported
+ * as the first Fibonacci number, and it optionally terminates when these
+ * operations have been executed for n_F Fibonacci numbers.
  * 
- * \param n_F  The 'n' of the last Fibonacci number, F_n, in the desired sequence.
- *             If n_F == (uint64_t)-1 then the sequence will run without limit.
+ * \param n_F  The 'n' of 'F_n', of the *final* Fibonacci number to be tested.
+ *             If n_F == (uint64_t)-1 then the sequence runs until signaled.
  */
 static void execute_request( const uint64_t n_F )
 {
