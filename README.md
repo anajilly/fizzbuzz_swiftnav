@@ -1,6 +1,8 @@
 # fizzbuzz_swiftnav
 ###FizzBuzz for Swift Navigation Application Process
 
+--
+
 ####Quick Start
 
 #####Build Requirements:
@@ -52,12 +54,12 @@ The chosen language is C.
 
 Because the spec may be subject to liberal interpretation, this program is implemented with command line options for the purpose of obtaining outputs which match the different possible interpretations. The rationalle is that the true desired output should be obtainable through the use of different program options and that regardless of what that desired output is, the availability of different formats will likely be seen as useful by some. The default output attempts to produce maximally literal interpretation of the spec, using these assumptions:
 
-1. For each F\_n, all matching rules will be applied. i.e., rules are applied without mutual exclusion. Therefore, because 3 and 5 are prime, the default produces both the divisilibilty output AND the primality output.
+1. For each F(n), all matching rules will be applied. i.e., rules are applied without mutual exclusion. Therefore, because 3 and 5 are prime, the default produces both the divisilibilty output AND the primality output.
 2. Rules are applied in a order that is implied by the order of the rules given in the specification.
 3. A concise output is preferred over a verbose output, so when a number is divisible by 15, we merely invoke both the divisible by 3 and divisible by 5 rules in the order needed to produce the divisible by 15 output. In this way, all applicable rules can said to have been invoked while not producing excessive output.
 4. As no mention of a limit to the 'n' in F(n) was suggested by the spec, an effort is made to remove artificial limits and let cpu speed and memory size define the limits on the size of the numbers.
 5. Because no standard record-seperating characters were mentioned by the spec, none are used in the default output.
-6. Classically, the Fibonacci sequence was defined to start with F\_1 == 1. The convention is followed by default.
+6. Classically, the Fibonacci sequence was defined to start with F(1) == 1. The convention is followed by default.
 
 
 --
@@ -73,7 +75,7 @@ ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz 10 ; ech
 ```
 
 #####fizzbuzz output for the first 10 Fibonacci numbers with report seperators inserted.
-Note that each response to a given F\_n is called a "report." When **-lf** is requested, a linefeed is inserted between the reports for each given F(n). When more than one report is indicated for a given F(n), all are given on one line, each seperated by a single space character. As mentioned earlier, the chosen order for multiple reports given on one line is the order they're listed in the spec.
+Note that each response to a given F(n) is called a "report." When **-lf** is requested, a linefeed is inserted between the reports for each given F(n). When more than one report is indicated for a given F(n), all are given on one line, each seperated by a single space character. As mentioned earlier, the chosen order for multiple reports given on one line is the order they're listed in the spec.
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf 10
 1
