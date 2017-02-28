@@ -30,7 +30,7 @@ usage: ./fizzbuzz [options] [<n>]
     -? | -h   print this message and exit
     -v        increase verbosity. -v may be specified many times
     -z        use zero as the first Fibonacci number
-    -s3,5p    supress the report of 3 and 5 as primes
+    -s3,5p    suppress the report of 3 and 5 as primes
     -lf       add linefeed after each F_n report
     -a        add an asterisk after BuzzFizz when the report, with very low probability, may be inaccurate
     <n>       consider only the first <n> Fibonacci numbers. (The default is to run until Ctrl+C is pressed)
@@ -52,13 +52,13 @@ This is a modified FizzBuzz algorithm. The usual rules for the game apply, with 
 
 The chosen language is C.
 
-Because the spec may be subject to liberal interpretation, this program is implemented with command line options for the purpose of obtaining outputs which match the different possible interpretations. The rationalle is that the true desired output should be obtainable through the use of different program options and that regardless of what that desired output is, the availability of different formats will likely be seen as useful by some. The default output attempts to produce maximally literal interpretation of the spec, using these assumptions:
+Because the spec may be subject to liberal interpretation, this program is implemented with command line options for the purpose of obtaining outputs which match the different possible interpretations. The rationale is that the true desired output should be obtainable through the use of different program options and that regardless of what that desired output is, the availability of different formats will likely be seen as useful by some. The default output attempts to produce maximally literal interpretation of the spec, using these assumptions:
 
-1. The union criterion. For each F(n), all matching rules will be applied, as a union (i.e. without mutual exclusion). For example: because 3 and 5 are prime, the default produces both the divisilibilty output AND the primality output.
+1. The union criterion. For each F(n), all matching rules will be applied, as a union (i.e. without mutual exclusion). For example: because 3 and 5 are prime, the default produces both the divisibility output AND the primality output.
 2. In absence of other guidance, unioned rules are applied in an order that is implied by the order of the rules given in the specification.
 3. A concise output is preferred over a verbose output. When a number is divisible by 15, we merely invoke both the divisible by 3 and divisible by 5 rules in the order needed to produce the specified divisible by 15 output. In this way the union criterion is applied, producing the minimal output that satisfies all applicable rules.
 4. As there is no mention of a limit to F(n)'s 'n' in the specification, an effort is made to remove artificial limits to n.
-5. Because no standard record-seperating characters were mentioned by the spec, none are used in the default output.
+5. Because no standard record-separating characters were mentioned by the spec, none are used in the default output.
 6. Classically, the Fibonacci sequence was defined to start with F(1) == 1. The convention is followed by default.
 
 These are the assumptions made which are used in the *default* output. To achieve a different output, command-line options are available, and are listed above.
@@ -69,14 +69,14 @@ These are the assumptions made which are used in the *default* output. To achiev
 See above for an example of running with the **-h** option which explains all the command line options.
 
 #####fizzbuzz default output for the first 10 Fibonacci numbers
-Note that, for clarity, 'echo' is appended on this commandline to add a linefeed after fizzbuzz terminates.
+Note that, for clarity, 'echo' is appended on this command-line to add a linefeed after fizzbuzz terminates.
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz 10 ; echo
 11BuzzFizzBuzzBuzzFizzFizzBuzzFizz8BuzzFizzBuzz34Fizz
 ```
 
-#####fizzbuzz output for the first 10 Fibonacci numbers with report seperators inserted.
-Note that each response to a given F(n) is called a "report." When **-lf** is requested, a linefeed is inserted between the reports for each given F(n). When more than one report is indicated for a given F(n), all are given on one line, each seperated by a single space character. As mentioned earlier, the chosen order for multiple reports given on one line is the order they're listed in the spec.
+#####fizzbuzz output for the first 10 Fibonacci numbers with report separators inserted.
+Note that each response to a given F(n) is called a "report." When **-lf** is requested, a linefeed is inserted between the reports for each given F(n). When more than one report is indicated for a given F(n), all are given on one line, each separated by a single space character. As mentioned earlier, the chosen order for multiple reports given on one line is the order they're listed in the spec.
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -lf 10
 1
