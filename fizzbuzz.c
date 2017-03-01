@@ -85,10 +85,10 @@ static void print_usage_and_exit()
     fprintf( stderr, "usage: %s [options] [<n>]\n", progname );
     fprintf( stderr, "  options:\n" );
     fprintf( stderr, "    -? | -h   print this message and exit\n" );
-    fprintf( stderr, "    -v        increase verbosity. -v may be specified many times\n" );
-    fprintf( stderr, "    -z        use zero as the first Fibonacci number\n" );
+    fprintf( stderr, "    -v        increase verbosity. using -v twice produces more verbose output\n" );
+    fprintf( stderr, "    -z        let F(1) == 0\n" );
     fprintf( stderr, "    -s3,5p    suppress the report of 3 and 5 as primes\n" );
-    fprintf( stderr, "    -lf       add linefeed after each F_n report\n" );
+    fprintf( stderr, "    -lf       add linefeed after each F(n) report\n" );
     fprintf( stderr, "    -a        add an asterisk after BuzzFizz when the report, with very low probability, may be inaccurate\n" );
     fprintf( stderr, "    <n>       consider only the first <n> Fibonacci numbers. (The default is to run until Ctrl+C is pressed)\n\n" );
     exit(0);
@@ -165,7 +165,7 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
     int printFIZZ = mpz_divisible_ui_p( F_n, 5 );
     int printBUZZ = mpz_divisible_ui_p( F_n, 3 );
 
-    if( opts.verbose > 0 ) printf("F_%lu: ", n);                     // useful info for checking the algorithm.
+    if( opts.verbose > 0 ) printf("F(%lu): ", n);                     // useful info for checking the algorithm.
     if( opts.verbose > 1 ) gmp_printf( "%Zd: ", F_n );
 
     if( printFIZZ ) printf( "%s", FIZZstr );                         // handle the Fizz case first because if n is divisible by 3
@@ -187,7 +187,7 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
     if( ! printFIZZ && ! printBUZZ )
     {
         int passes = 50;                                             // mpz_probab_prime_p() doc says 50 is upper reasonable number
-        int primeclass = mpz_probab_prime_p( F_n, passes );          // if primeclass == 1; P( F_n is composite ) <= 1/(4^passes)
+        int primeclass = mpz_probab_prime_p( F_n, passes );          // if primeclass == 1; P( F_n is composite ) <= 1/(4^passes) is claimed
 
         switch( primeclass )
         {
