@@ -11,7 +11,7 @@
 * gmplib, the [GNU Multiple Precision Arithmetic Library](https://gmplib.org/) and its 'dev' packages, must be installed
 
 
-#####Build and Test:
+#####Build Instructions:
 
 1. Checkout this repository
 2. cd fizzbuzz\_swiftnav/
