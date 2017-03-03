@@ -6,10 +6,6 @@ project(fizzbuzz_swiftnav)
 # Strictifying compiler options
 set(CMAKE_C_FLAGS "-g -Wall -Werror ${CMAKE_C_FLAGS}")
 
-# these may be used before long. as of now, things are very simple.
-#add_subdirectory(src)
-#add_subdirectory(test)
-
 add_executable(fizzbuzz fizzbuzz.c)    
 target_link_libraries(fizzbuzz gmp)    
 
