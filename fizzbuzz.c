@@ -50,10 +50,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
-#include <math.h>
 #include <ctype.h>
 #include <string.h>
-#include <assert.h>
 
 #include <gmp.h>
 
@@ -133,7 +131,6 @@ int main( int argc, char ** argv )
 }
 
 
-
 /** \brief Advance the Fibonacci series by one step.
  * 
  * Preconditions:
@@ -155,6 +152,16 @@ static void fibn_step( mpz_t F_np1, mpz_t F_n, mpz_t F_nm1 )         // use 3 ar
     mpz_set( F_n, F_np1 );
 }
 
+/** \brief report a prime found by printing BuzzFizz
+ *
+ * \param certain    If ! certain, the optional asterisk may be appended
+ */
+static void report_prime( int certain )
+{
+    printf( "%s%s%s", BUZZstr, FIZZstr,                              // BuzzFizz,
+            (! certain && opts.add_BuzzFizz_asterisk ? "*" : "") );  // with optional caveat '*'
+}
+
 /** \brief Execute the FizzBuzz checks and produce output for one Fibonacci number.
  * 
  * \param n    The 'n' number used to name the Fibonacci number in the sequence.
@@ -165,7 +172,7 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
     int printFIZZ = mpz_divisible_ui_p( F_n, 5 );
     int printBUZZ = mpz_divisible_ui_p( F_n, 3 );
 
-    if( opts.verbose > 0 ) printf("F(%lu): ", n);                     // useful info for checking the algorithm.
+    if( opts.verbose > 0 ) printf("F(%lu): ", n);                    // useful info for checking the algorithm.
     if( opts.verbose > 1 ) gmp_printf( "%Zd: ", F_n );
 
     if( printFIZZ ) printf( "%s", FIZZstr );                         // handle the Fizz case first because if n is divisible by 3
@@ -179,9 +186,10 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
         && ! opts.suppress_threeandfive_prime_report )               // and this block is all about reporting 3,5 as prime
     {
         if( printFIZZ || printBUZZ )                                 // for 0-8, divisibility by 3 or 5 implies primality as well,
-            printf( "%s%s%s",                                        // so report it as prime.
-                    ( opts.add_linefeeds ? " " : "" ),               // if a linefeed is desired, then I presume a space is also desired
-                    BUZZstr, FIZZstr );                              // BuzzFizz
+        {
+            if( opts.add_linefeeds ) printf( " " );                  // if a linefeed is desired, then space is also likely desired
+            report_prime(1);
+        }
     }
 
     if( ! printFIZZ && ! printBUZZ )
@@ -191,16 +199,9 @@ static void run_checks_and_report( const uint64_t n, const mpz_t F_n )
 
         switch( primeclass )
         {
-        case 1:                                                      // Almost certainly prime.
-            printf( "%s%s%s", BUZZstr, FIZZstr,                      // BuzzFizz,
-                    (opts.add_BuzzFizz_asterisk ? "*" : "") );       // with optional caveat '*'
-            break;
-        case 2:                                                      // Definitely prime. BuzzFizz
-            printf( "%s%s", BUZZstr, FIZZstr );
-            break;
-        default:                                                     // Definitely not prime and not divisible by 3 or 5. show F_n
-            gmp_printf( "%Zd", F_n );
-            break;
+        case 1:   report_prime(0);           break;                  // Almost certainly prime.
+        case 2:   report_prime(1);           break;                  // Definitely prime.
+        default:  gmp_printf( "%Zd", F_n );  break;                  // Definitely not prime and not divisible by 3 or 5. show F_n
         }
     }
 

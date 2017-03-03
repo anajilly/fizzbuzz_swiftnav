@@ -7,11 +7,12 @@
 
 #####Build Requirements:
 
-* [CMake](https://cmake.org/) and a standard Linux-style build environment should be installed and working
-* gmplib, the [GNU Multiple Precision Arithmetic Library](https://gmplib.org/) and its 'dev' packages, must be installed
+* Linux-style build environment should be installed and working, including bash and diff
+* [CMake](https://cmake.org/)
+* gmplib, the [GNU Multiple Precision Arithmetic Library](https://gmplib.org/) and header files
 
 
-#####Build Instructions:
+#####Build and Test Instructions:
 
 1. Checkout this repository
 2. cd fizzbuzz\_swiftnav/
@@ -19,10 +20,11 @@
 4. cd build
 5. cmake ../
 6. make
+7. cd ../
+8. ./simple-tests.sh
 
 
 After the above steps are complete, you should find an executable file named fizzbuzz in the current directory. This program accepts zero or more command-line arguments. For usage documentation, please run the program with the -h option.
-
 ```
 ana@trifle:~/code/experiments/fizzbuzz_swiftnav/build (dev)$ ./fizzbuzz -h
 usage: ./fizzbuzz [options] [<n>]
